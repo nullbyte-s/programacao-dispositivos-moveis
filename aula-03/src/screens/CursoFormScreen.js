@@ -2,24 +2,30 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { addCurso, updateCurso } from '../services/CursoService'
 
-const AddEditCursoScreen = ({ navigation, route }) => {
+const CursoFormScreen = ({ route, navigation }) => {
+
+    const itemId = route.params?.itemId
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [isEditing, setIsEditing] = useState(false)
-    const [cursoId, setCursoId] = useState(null)
+    const [editing, setediting] = useState(false)
 
     useEffect(() => {
-        if (route.params?.curso) {
-            const { id, name, description } = route.params.curso
-            setName(name)
-            setDescription(description)
-            setCursoId(id)
-            setIsEditing(true)
+        if (itemId) {
+            const buscarCurso = async () => {
+                const docRef = doc(db, 'cursos', itemId)
+                const docSnap = await getDoc(docRef)
+                if (docSnap.exists()) {
+                    setName(docSnap.data().name)
+                    setDescription(docSnap.data().description)
+                    setediting(true)
+                }
+            }
+            buscarCurso()
         }
-    }, [route.params])
+    }, [itemId])
 
     const handleSubmit = async () => {
-        console.log('Dados do curso:', { cursoId, name, description, isEditing })
+        console.log('Dados do curso:', { itemId, name, description, editing })
 
         if (!name || !description) {
             Alert.alert("Erro", "Preencha todos os campos")
@@ -34,12 +40,12 @@ const AddEditCursoScreen = ({ navigation, route }) => {
         console.log('Payload enviado:', JSON.stringify(cursoData, null, 2))
 
         try {
-            if (isEditing) {
-                console.log('Tentando atualizar curso ID:', cursoId)
-                await updateCurso(cursoId, cursoData)
+            if (editing) {
+                console.log('Tentando atualizar curso ID:', itemId)
+                await updateCurso(itemId, cursoData)
                 Alert.alert("Sucesso", "Curso atualizado com sucesso")
                 navigation.navigate('Details', {
-                    itemId: cursoId,
+                    itemId: itemId,
                     name: cursoData.name,
                     description: cursoData.description
                 })
@@ -60,7 +66,7 @@ const AddEditCursoScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>
-                {isEditing ? 'Editar Curso' : 'Adicionar Curso'}
+                {editing ? 'Editar Curso' : 'Adicionar Curso'}
             </Text>
 
             <TextInput
@@ -80,7 +86,7 @@ const AddEditCursoScreen = ({ navigation, route }) => {
             />
 
             <Button
-                title={isEditing ? "Atualizar" : "Salvar"}
+                title={editing ? "Atualizar" : "Salvar"}
                 onPress={handleSubmit}
             />
         </View>
@@ -88,19 +94,9 @@ const AddEditCursoScreen = ({ navigation, route }) => {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20 },
-    title: { fontSize: 20, fontWeight: 'bold', marginBottom: 20 },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 15
-    },
-    multilineInput: {
-        height: 100,
-        textAlignVertical: 'top'
-    }
+    container: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: '#f5f5f5' },
+    title: { fontSize: 22, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+    input: { borderBottomWidth: 1, marginBottom: 20, padding: 8 },
 })
 
-export default AddEditCursoScreen
+export default CursoFormScreen

@@ -1,18 +1,21 @@
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useState } from 'react'
 import { getCursos, deleteCurso } from '../services/CursoService'
+import { useFocusEffect } from '@react-navigation/native'
 
 const HomeScreen = ({ navigation }) => {
-    const [cursos, setCursos] = useState([])
+    const [items, setItems] = useState([])
 
-    useEffect(() => {
-        loadCursos()
-    }, [])
-
-    const loadCursos = async () => {
-        const cursosData = await getCursos()
-        setCursos(cursosData)
+    const carregarCursos = async () => {
+        const cursos = await getCursos()
+        setItems(cursos)
     }
+
+    useFocusEffect(
+        useCallback(() => {
+            carregarCursos()
+        }, [])
+    )
 
     const handleDelete = async (id) => {
         Alert.alert(
@@ -36,7 +39,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.title}>📚 Cursos Disponíveis</Text>
 
             <FlatList
-                data={cursos}
+                data={items}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <TouchableOpacity

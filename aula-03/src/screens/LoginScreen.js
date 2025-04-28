@@ -11,7 +11,6 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.title}>🔐 Login</Text>
 
-            { }
             <TextInput
                 placeholder="Digite seu nome"
                 style={styles.input}
@@ -19,7 +18,6 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={setUsername}
             />
 
-            { }
             <TextInput
                 placeholder="Digite sua senha"
                 style={styles.input}
@@ -28,18 +26,15 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={setPassword}
             />
 
-            { }
             <Button title="Entrar" onPress={() => navigation.replace('Main')} />
 
             <Text style={styles.orText}>Ou entre com</Text>
 
-            { }
             <TouchableOpacity style={styles.socialButton}>
                 <AntDesign name="google" size={24} color="white" />
                 <Text style={styles.socialText}>Entrar com Google</Text>
             </TouchableOpacity>
 
-            { }
             <TouchableOpacity style={[styles.socialButton, styles.githubButton]}>
                 <Ionicons name="logo-github" size={24} color="white" />
                 <Text style={styles.socialText}>Entre com o github</Text>
