@@ -138,7 +138,7 @@ aula-03/
     ├── screens/                   # Telas da aplicação (views), cada uma representando uma parte da UI
     │   ├── HomeScreen.js          # Tela principal com a lista de cursos (GET), permite visualizar e excluir
     │   ├── DetailsScreen.js       # Tela de detalhes de um curso específico (recebe params via navegação)
-    │   ├── AddEditCursoScreen.js  # Tela de formulário reutilizável para adicionar ou editar cursos (POST/PUT)
+    │   ├── CursoFormScreen.js     # Tela de formulário reutilizável para adicionar ou editar cursos (POST/PUT)
     │   ├── LoginScreen.js         # Tela de login fictício com navegação condicional para a Tab principal
     │   └── ProfileScreen.js       # Tela estática exibindo informações básicas do usuário e botão de logout
     │
